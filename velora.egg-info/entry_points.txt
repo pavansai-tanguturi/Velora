@@ -1,5 +1,0 @@
-[console_scripts]
-velora = velora.cli:main
-velora-chat = velora.cli:chat_main
-velora-server = velora.cli:server_main
-velora-share = velora.cli:share_main

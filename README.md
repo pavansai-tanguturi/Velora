@@ -14,7 +14,7 @@ A lightweight Python library for peer-to-peer file sharing and real-time chat us
 ## Installation 📦
 
 ```bash
-pip install velora
+pip install velora-chat
 ```
 
 Or install from source:
