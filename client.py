@@ -7,48 +7,13 @@ import time
 
 def receive_messages(sock, name):
     """Continuously receive and display messages from the server"""
-    buffer = ""
     while True:
         try:
-            data = sock.recv(8192).decode('utf-8')  # Larger buffer for files
-            if data:
-                buffer += data
-                
-                # Check if we have complete messages
-                while buffer:
-                    if buffer.startswith("FILE:"):
-                        # Look for newline delimiter
-                        newline_pos = buffer.find('\n')
-                        if newline_pos > 0:
-                            # We have a complete file message
-                            file_data = buffer[5:newline_pos]  # Remove "FILE:" prefix
-                            receive_file(file_data)
-                            buffer = buffer[newline_pos + 1:]
-                        else:
-                            # Incomplete message, wait for more data
-                            break
-                    else:
-                        # Handle regular message
-                        newline_pos = buffer.find('\n')
-                        if newline_pos == -1:
-                            newline_pos = len(buffer)
-                        
-                        msg = buffer[:newline_pos]
-                        if msg.strip():
-                            clean_msg = msg.replace('\\', '').strip()
-                            print(f"{clean_msg}")
-                        buffer = buffer[newline_pos+1:]
-                        break
-                
-                # Handle any remaining regular messages
-                if buffer and not buffer.startswith("FILE:"):
-                    lines = buffer.split('\n')
-                    for line in lines[:-1]:  # Process all complete lines
-                        if line.strip():
-                            clean_msg = line.replace('\\', '').strip()
-                            print(f"{clean_msg}")
-                    buffer = lines[-1]  # Keep the last incomplete line
-                    
+            msg = sock.recv(1024).decode('utf-8')
+            if msg:
+                # Clean the received message from any escape characters
+                clean_msg = msg.replace('\\', '').strip()
+                print(f"{clean_msg}")
             else:
                 break
         except Exception as e:
@@ -56,139 +21,18 @@ def receive_messages(sock, name):
             sock.close()
             break
 
-def send_file(sock, name, file_path):
-    """Send a file through the chat"""
-    try:
-        import base64
-        
-        # Get file info
-        file_name = os.path.basename(file_path)
-        file_size = os.path.getsize(file_path)
-        
-        # Check if file exists and has content
-        if file_size == 0:
-            print(f"[ERROR] File is empty: {file_path}")
-            return
-        
-        # Check file size limit (5MB)
-        max_size = 5 * 1024 * 1024  # 5MB
-        if file_size > max_size:
-            print(f"[ERROR] File too large ({file_size} bytes). Maximum size is 5MB")
-            return
-        
-        print(f"[INFO] Sending file '{file_name}' ({file_size:,} bytes)...")
-        
-        # Read and encode file
-        with open(file_path, 'rb') as f:
-            file_data = f.read()
-            encoded_data = base64.b64encode(file_data).decode('utf-8')
-        
-        # Create file message
-        file_msg = {
-            "type": "file",
-            "sender": name,
-            "filename": file_name,
-            "size": file_size,
-            "data": encoded_data
-        }
-
-        import json
-        file_json = json.dumps(file_msg)
-        message = f"FILE:{file_json}\n".encode('utf-8')  # Add newline delimiter
-        
-        # Send in smaller chunks with error handling
-        chunk_size = 1024  # Smaller chunks for reliability
-        total_sent = 0
-        
-        while total_sent < len(message):
-            try:
-                chunk = message[total_sent:total_sent + chunk_size]
-                sent = sock.send(chunk)
-                if sent == 0:
-                    raise Exception("Socket connection broken")
-                total_sent += sent
-                
-                # Small delay to prevent overwhelming
-                if total_sent % (chunk_size * 10) == 0:
-                    time.sleep(0.01)
-                    
-            except (socket.error, BrokenPipeError) as e:
-                raise Exception(f"Connection lost while sending file: {e}")
-            except Exception as e:
-                raise Exception(f"Unexpected error: {e}")
-        
-        print(f"[INFO] File '{file_name}' sent successfully!")
-        
-    except FileNotFoundError:
-        print(f"[ERROR] File not found: {file_path}")
-    except PermissionError:
-        print(f"[ERROR] Permission denied accessing file: {file_path}")
-    except Exception as e:
-        print(f"[ERROR] Failed to send file: {e}")
-
-def receive_file(file_data):
-    """Receive and save a file"""
-    try:
-        import base64
-        import json
-        
-        # Parse file data
-        file_info = json.loads(file_data)
-        filename = file_info['filename']
-        sender = file_info['sender']
-        file_size = file_info['size']
-        encoded_data = file_info['data']
-        
-        # Decode file data
-        file_data = base64.b64decode(encoded_data.encode('utf-8'))
-        
-        # Create downloads directory if not exists
-        downloads_dir = "downloads"
-        if not os.path.exists(downloads_dir):
-            os.makedirs(downloads_dir)
-        
-        # Save file with sender prefix
-        safe_filename = f"{sender}_{filename}"
-        file_path = os.path.join(downloads_dir, safe_filename)
-        
-        with open(file_path, 'wb') as f:
-            f.write(file_data)
-        
-        print(f"\n📁 File received: '{filename}' from {sender}")
-        print(f"   Saved as: {file_path} ({file_size:,} bytes)")
-        print("You: ", end="")
-        
-    except Exception as e:
-        print(f"\n[ERROR] Failed to receive file: {e}")
-
 def send_messages(sock, name):
     """Handle user input and send messages to server"""
     try:
-        print("\n💡 Commands:")
-        print("   - Type messages normally to chat")
-        print("   - /file <path> to send a file")
-        print("   - /quit to exit")
-        print()
-        
         while True:
             user_input = input("").strip()
             if user_input:
                 if user_input.lower() == '/quit':
                     break
-                elif user_input.startswith('/file '):
-                    # Send file
-                    file_path = user_input[6:].strip()  # Remove '/file '
-                    # Remove quotes if present
-                    file_path = file_path.strip('\'"')
-                    if os.path.exists(file_path):
-                        send_file(sock, name, file_path)
-                    else:
-                        print(f"[ERROR] File not found: {file_path}")
-                else:
-                    # Send regular message
-                    clean_input = user_input.replace('\\', '').replace('\n', '').replace('\r', '')
-                    full_msg = f"{name}: {clean_input}\n"  # Add newline for consistency
-                    sock.send(full_msg.encode('utf-8'))
+                # Clean user input from escape characters
+                clean_input = user_input.replace('\\', '').replace('\n', '').replace('\r', '')
+                full_msg = f"{name}: {clean_input}"
+                sock.send(full_msg.encode('utf-8'))
     except KeyboardInterrupt:
         print("\n[INFO] Disconnecting...")
     except Exception as e:
@@ -254,8 +98,6 @@ def connect_to_server():
         ngrok_choice = input("Do you want to create ngrok tunnel or join existing ngrok? (create/join): ").strip().lower()
         
         if ngrok_choice == "create":
-            # Start server first
-            start_server()
             
             # Start ngrok TCP tunnel
             print("[INFO] Starting ngrok tunnel...")
@@ -323,7 +165,7 @@ def main():
         sock.settimeout(None)  # Remove timeout after connection
         print("\n[INFO] Connected to server!")
         print(f"[INFO] You are now chatting as: {name}")
-        print("[INFO] Files will be saved to 'downloads' folder")
+        print("[INFO] Type '/quit' to exit the chat")
         print("=" * 50)
         
     except socket.timeout:
@@ -415,4 +257,3 @@ if __name__ == "__main__":
         show_help()
     else:
         main()
-        '/Users/pavansaitanguturi/Desktop/Screenshot 2025-07-20 at 12.33.05 PM.png'
