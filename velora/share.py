@@ -17,7 +17,7 @@ def quick_share(file_path, server_address=None, sender_name="Anonymous"):
     Args:
         file_path (str): Path to file to share
         server_address (str, optional): Server address (IP:port or ngrok URL). 
-                                      If None, starts local server.
+                                        If None, starts local server.
         sender_name (str): Name to display as sender
     """
     # Validate file

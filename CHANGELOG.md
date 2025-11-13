@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.1] - 2025-11-13
 
 ### Changed
+
 - Code cleanup and repository organization
 - Removed development artifacts and temporary files
 - Streamlined documentation structure
@@ -15,9 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-11-13
 
 ### Added
+
 - Initial release of Velora
 - Real-time text chat over TCP sockets
-- File sharing up to 1GB per file  
+- File sharing up to 1GB per file
 - Multiple connection modes (local, IP-based, global via ngrok)
 - Zero external dependencies - pure Python standard library
 - Command line interface with subcommands
@@ -29,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Interactive and programmatic API modes
 
 ### Features
+
 - `velora chat` - Start interactive chat client
 - `velora share` - Quick file sharing
 - `velora server` - Start chat server
@@ -36,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Library usage with `velora.VeloraClient`, `velora.VeloraServer`, `velora.quick_share`
 
 ### Technical Details
+
 - Base64 encoding for file transfers
 - JSON message protocol for file metadata
 - Robust TCP socket handling with proper error recovery

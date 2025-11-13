@@ -65,6 +65,7 @@ velora chat
 ## 🌐 Usage Examples for New Users
 
 ### 1. Quick File Sharing
+
 ```bash
 # Share a file locally (starts server automatically)
 velora share document.pdf
@@ -74,6 +75,7 @@ velora chat --host YOUR_IP_ADDRESS
 ```
 
 ### 2. Start a Chat Room
+
 ```bash
 # Create a room
 velora server
@@ -83,6 +85,7 @@ velora chat --host YOUR_IP_ADDRESS
 ```
 
 ### 3. Global Sharing with ngrok
+
 ```bash
 # Create global tunnel (requires ngrok installed)
 velora chat  # Choose option 3 -> create
@@ -94,13 +97,14 @@ velora chat  # Choose option 3 -> join
 ## 📋 System Requirements
 
 - **Python**: 3.7 or higher
-- **Operating System**: Windows, macOS, or Linux  
+- **Operating System**: Windows, macOS, or Linux
 - **Dependencies**: None (uses only Python standard library)
 - **Optional**: ngrok (for global access)
 
 ## 🛠️ Troubleshooting
 
 ### Command not found
+
 ```bash
 # If 'velora' command is not found, try:
 python -m velora.cli --help
@@ -110,12 +114,14 @@ pip show velora
 ```
 
 ### Permission Issues
+
 ```bash
 # Use --user flag for user-only install
 pip install --user git+https://github.com/pavansai-tanguturi/Velora.git
 ```
 
 ### Virtual Environment (Recommended)
+
 ```bash
 # Create isolated environment
 python -m venv velora-env
@@ -126,6 +132,7 @@ pip install git+https://github.com/pavansai-tanguturi/Velora.git
 ## 🔧 For Developers
 
 ### Building Distribution Packages
+
 ```bash
 # Install build tools
 pip install build twine
@@ -139,6 +146,7 @@ python -m build
 ```
 
 ### Publishing to PyPI
+
 ```bash
 # Install upload tools
 pip install twine
@@ -154,7 +162,7 @@ twine upload dist/*
 
 1. **Create PyPI Account**: Sign up at https://pypi.org/
 2. **Create API Token**: Go to Account Settings → API tokens
-3. **Configure Credentials**: 
+3. **Configure Credentials**:
    ```bash
    # Create ~/.pypirc file with your credentials
    [pypi]
@@ -173,16 +181,18 @@ twine upload dist/*
 ## 📤 Sharing Your Installation
 
 ### Share via GitHub
+
 1. Push your code to GitHub
 2. Others install with: `pip install git+https://github.com/YOUR_USERNAME/Velora.git`
 
-2. **Share via Files**
-1. Create distribution: `python -m build`
-2. Share the `dist/velora_chat-1.0.0-py3-none-any.whl` file
-3. Others install with: `pip install velora_chat-1.0.0-py3-none-any.whl`
+3. **Share via Files**
+4. Create distribution: `python -m build`
+5. Share the `dist/velora_chat-1.0.0-py3-none-any.whl` file
+6. Others install with: `pip install velora_chat-1.0.0-py3-none-any.whl`
 
 ### Share via ZIP
-1. Create a ZIP of your project (excluding .git, __pycache__, etc.)
+
+1. Create a ZIP of your project (excluding .git, **pycache**, etc.)
 2. Others extract and run: `pip install .`
 
 ## 🎯 Quick Start for New Users

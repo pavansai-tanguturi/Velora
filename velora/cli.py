@@ -29,7 +29,7 @@ def main():
     share_parser = subparsers.add_parser("share", help="Quick share a file")
     share_parser.add_argument("file", help="File path to share")
     share_parser.add_argument("server", nargs="?", default=None, 
-                             help="Server address (IP:port or ngrok URL)")
+                                help="Server address (IP:port or ngrok URL)")
     share_parser.add_argument("--name", default="Anonymous", help="Your display name")
     
     # Server command

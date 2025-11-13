@@ -3,12 +3,14 @@
 ## 📋 Current Version History
 
 ### v1.0.1 (2025-11-13) - Latest
+
 - **PyPI**: ✅ Published
-- **Git Tag**: ✅ Created  
+- **Git Tag**: ✅ Created
 - **GitHub**: ✅ Pushed
 - **Changes**: Code cleanup, repository organization, documentation streamlining
 
-### v1.0.0 (2025-11-13) - Initial Release  
+### v1.0.0 (2025-11-13) - Initial Release
+
 - **PyPI**: ✅ Published
 - **Git Tag**: ✅ Created
 - **GitHub**: ✅ Pushed
@@ -17,6 +19,7 @@
 ## 🚀 Release Process for Future Versions
 
 ### 1. Make Your Changes
+
 ```bash
 # Edit code, fix bugs, add features
 vim velora/client.py
@@ -25,18 +28,21 @@ velora chat
 ```
 
 ### 2. Update Version Number
+
 ```bash
 # Edit setup.py - increment version (1.0.1 → 1.0.2)
 vim setup.py
 ```
 
 ### 3. Update Documentation
+
 ```bash
 # Add entry to CHANGELOG.md
 vim CHANGELOG.md
 ```
 
 ### 4. Commit Changes
+
 ```bash
 git add .
 git commit -m "Release v1.0.2 - Brief description of changes"
@@ -44,6 +50,7 @@ git push origin master
 ```
 
 ### 5. Create Git Tag
+
 ```bash
 # Create annotated tag with release message
 git tag -a v1.0.2 -m "Release v1.0.2 - Brief description"
@@ -51,6 +58,7 @@ git push origin v1.0.2
 ```
 
 ### 6. Build and Publish to PyPI
+
 ```bash
 # Clean previous builds
 rm -rf dist/ *.egg-info/
@@ -65,6 +73,7 @@ twine upload dist/*
 ## 🔍 Useful Git Commands
 
 ### View Version History
+
 ```bash
 # List all tags
 git tag --sort=version:refname
@@ -80,6 +89,7 @@ git diff v1.0.0..v1.0.1
 ```
 
 ### GitHub Releases
+
 - Visit: https://github.com/pavansai-tanguturi/Velora/releases
 - Create releases from your tags with detailed release notes
 - Attach distribution files if needed
@@ -87,12 +97,14 @@ git diff v1.0.0..v1.0.1
 ## 📊 Version Numbering Strategy
 
 Using **Semantic Versioning** (semver.org):
+
 - `MAJOR.MINOR.PATCH` (e.g., 1.0.1)
 - **MAJOR** (1.x.x): Breaking changes, incompatible API changes
 - **MINOR** (x.1.x): New features, backwards compatible
 - **PATCH** (x.x.1): Bug fixes, backwards compatible
 
 ### Examples:
+
 - `1.0.2` - Bug fix release
 - `1.1.0` - New feature (e.g., add GUI mode)
 - `2.0.0` - Major rewrite or breaking changes
