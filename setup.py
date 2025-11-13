@@ -16,12 +16,12 @@ def read_readme():
 
 setup(
     name="velora-chat",
-    version="1.0.0",
+    version="1.0.1",
     description="Simple file sharing and chat over TCP sockets",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     author="Pavan Sai Tanguturi",
-    author_email="pavansai.tanguturi@example.com",
+    author_email="pavansai.tanguturi@gmail.com",
     url="https://github.com/pavansai-tanguturi/Velora",
     packages=find_packages(),
     classifiers=[
