@@ -1,6 +1,13 @@
-ngrok
-threading
-socket
-subprocess
-time
-os
+# Velora has no external dependencies
+# All required modules are part of Python's standard library:
+# - socket (networking)
+# - threading (concurrent operations)
+# - json (data serialization)
+# - base64 (file encoding)
+# - subprocess (process management)
+# - time (timing operations)
+# - os (file system operations)
+# - argparse (CLI parsing)
+
+# When you run 'pip install velora', no additional packages will be installed.
+# Python 3.7 or higher is required.
