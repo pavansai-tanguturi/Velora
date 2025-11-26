@@ -27,6 +27,7 @@ class VeloraServer:
         self.host = host
         self.port = port
         self.clients = []
+        self.client_names = {}  # Map client socket to user name
         self.lock = threading.Lock()
         self.running = False
         
@@ -72,6 +73,7 @@ class VeloraServer:
                 except:
                     pass
             self.clients.clear()
+            self.client_names.clear()
     
     def _handle_client(self, conn, addr):
         """Handle individual client connections"""
@@ -102,15 +104,32 @@ class VeloraServer:
                 try:
                     msg = msg_data.decode('utf-8')
                     
-                    # Try to parse as JSON (file message)
+                    # Try to parse as JSON (file message or command)
                     try:
                         data = json.loads(msg)
+                        
+                        # Store user name from first message
+                        if conn not in self.client_names and 'sender' in data:
+                            with self.lock:
+                                self.client_names[conn] = data['sender']
+                            print(f"[USER JOINED] {data['sender']} from {addr}")
+                        
                         if data.get('type') == 'file':
                             print(f"[FILE TRANSFER] {data['sender']} sending {data['filename']} ({data['size']} bytes)")
                             self._broadcast_file(data, conn)
                             continue
+                        elif data.get('type') == 'command':
+                            self._handle_command(data, conn)
+                            continue
                     except json.JSONDecodeError:
                         pass
+                    
+                    # Extract username from text message for tracking
+                    if ':' in msg and conn not in self.client_names:
+                        username = msg.split(':', 1)[0].strip()
+                        with self.lock:
+                            self.client_names[conn] = username
+                        print(f"[USER JOINED] {username} from {addr}")
                     
                     # Regular text message (length-prefixed)
                     self._broadcast_message(msg, conn)
@@ -123,14 +142,40 @@ class VeloraServer:
             print(f"[ERROR] Error handling client {addr}: {e}")
         finally:
             # Clean up connection
+            username = self.client_names.get(conn, 'Unknown')
             with self.lock:
                 if conn in self.clients:
                     self.clients.remove(conn)
+                if conn in self.client_names:
+                    del self.client_names[conn]
             try:
                 conn.close()
             except:
                 pass
-            print(f"[DISCONNECTED] {addr} left.")
+            print(f"[DISCONNECTED] {username} ({addr}) left.")
+    
+    def _handle_command(self, command_data, sender_conn):
+        """Handle special commands from clients"""
+        command = command_data.get('command')
+        
+        if command == 'list_users':
+            # Send list of connected users
+            with self.lock:
+                users = list(self.client_names.values())
+            
+            response = json.dumps({
+                'type': 'users_list',
+                'users': users
+            })
+            
+            try:
+                msg_bytes = response.encode('utf-8')
+                msg_len = len(msg_bytes)
+                header = f"{msg_len:010d}".encode('utf-8')
+                sender_conn.sendall(header)
+                sender_conn.sendall(msg_bytes)
+            except Exception as e:
+                print(f"[ERROR] Failed to send users list: {e}")
 
     def _broadcast_message(self, message, sender_conn):
         """Broadcast text message to all clients except sender"""
