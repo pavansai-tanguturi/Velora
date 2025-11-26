@@ -44,8 +44,9 @@ def main():
     args = parser.parse_args()
     
     if not args.command:
-        # No subcommand, show help
-        parser.print_help()
+        # No subcommand provided, start interactive chat by default
+        print("Starting Velora Chat (use 'velora --help' for all commands)...\n")
+        chat_main(None)
         return
     
     # Execute commands

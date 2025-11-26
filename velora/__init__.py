@@ -5,9 +5,9 @@ A lightweight Python library for peer-to-peer file sharing and real-time chat
 using TCP sockets. No external dependencies required.
 """
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __author__ = "Pavan Sai Tanguturi"
-__email__ = "pavansai.tanguturi@example.com"
+__email__ = "pavansai.tanguturi@gmail.com"
 
 from .client import VeloraClient
 from .server import VeloraServer
