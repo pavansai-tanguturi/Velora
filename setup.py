@@ -16,7 +16,7 @@ def read_readme():
 
 setup(
     name="velora-chat",
-    version="1.1.0",
+    version="1.1.1",
     description="Simple file sharing and chat over TCP sockets",
     long_description=read_readme(),
     long_description_content_type="text/markdown",

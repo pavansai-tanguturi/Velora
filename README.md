@@ -7,8 +7,12 @@ A lightweight Python library for peer-to-peer file sharing and real-time chat. Z
 ## Features
 
 - 💬 Real-time text chat over TCP
-- 📁 File sharing (any file type, up to 1GB)
-- 🌐 Multiple connection modes (local, IP-based, global with ngrok)
+- 📁 File sharing with progress bars and speed indicators
+- 🔔 System notifications when files are received
+- 🎯 Drag-and-drop file support
+- 🔄 Automatic reconnection on connection loss
+- 👥 User list and management commands
+- 🌐 Multiple connection modes (IP-based, global with ngrok)
 - 🔧 Zero dependencies - pure Python
 - ⚡ One-command file sharing
 - 📦 Easy CLI and programmatic usage
@@ -21,20 +25,21 @@ pip install velora-chat
 
 ## Quick Start
 
-### Start a chat server
+### Start chatting (simplest way)
 ```bash
+velora
+```
+
+### Or use specific commands
+```bash
+# Start a chat server
 velora server
-```
 
-### Join a chat
-```bash
+# Join a chat
 velora chat
-```
 
-### Share a file
-```bash
+# Share a file
 velora share /path/to/file.pdf
-velora share document.pdf 192.168.1.100:5003
 ```
 
 ## Command Line Interface
@@ -85,26 +90,39 @@ velora.quick_share("/path/to/file.pdf", "192.168.1.100:5003", "YourName")
 
 ## Connection Modes
 
-**Local Network**: Connect devices on the same network
-```bash
-velora chat  # Choose option 1
-```
-
 **IP-based**: Connect across networks using IP addresses
 ```bash
-velora chat --host 192.168.1.100
+velora  # Choose option 1 - create or join room
 ```
 
 **Global (ngrok)**: Share globally using ngrok tunneling
 ```bash
-velora chat  # Choose option 3
+velora  # Choose option 2 - create or join ngrok tunnel
+```
+
+**Direct Connection**: Connect to a specific server
+```bash
+velora chat --host 192.168.1.100
 ```
 
 ## In-Chat Commands
 
 - Type any text to send a message
+- Drag and drop files to share them instantly
 - `/file /path/to/file.pdf` - Share a file
+- `/users` - List all connected users
+- `/help` - Show all available commands
 - `/quit` - Exit the chat
+
+## New in v1.1.0
+
+- ⚡ **Progress Bars**: Real-time progress with transfer speed and ETA for large files
+- 🔔 **Notifications**: Audio alerts when files are received (cross-platform)
+- 🎯 **Drag & Drop**: Simply paste file paths to send files
+- 👥 **User Management**: `/users` command to see who's connected
+- 📖 **Help System**: `/help` command for quick reference
+- 🔄 **Auto-Reconnect**: Automatically reconnects on connection loss (up to 3 attempts)
+- 🖥️ **Better CLI**: Just run `velora` to start chatting instantly
 
 ## Requirements
 
